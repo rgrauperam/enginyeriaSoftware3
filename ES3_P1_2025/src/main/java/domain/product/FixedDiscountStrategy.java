@@ -9,6 +9,6 @@ public class FixedDiscountStrategy implements DiscountStrategy {
 
     @Override
     public double applyDiscount(double standardPrice) {
-        return standardPrice - discountValue;
+        return Math.max(0, standardPrice - discountValue);
     }
 }

@@ -1,11 +1,9 @@
 package presentation;
 
 import domain.order.Order;
+import domain.payment.PaymentFactory;
 import domain.payment.PaymentMethod;
-import domain.product.FixedDiscountProduct;
-import domain.product.NoDiscountProduct;
-import domain.product.PercentageDiscountProduct;
-import domain.product.Product;
+import domain.product.*;
 
 import domain.payment.Payment;
 
@@ -41,7 +39,7 @@ public class StartSimulation {
 
         //TODO: Complete to create Payment
         //Mètode de pagament amb creditCard
-        Payment pay = paymentMethod.createPayment();
+        Payment pay = PaymentFactory.selectPaymentMethod(paymentMethod);
 
         o.confirmOrderAndPay(pay);
         System.out.println("Completed order info:");
@@ -57,19 +55,19 @@ public class StartSimulation {
 
         /*TODO: Create 10 different products with different discount types and add them to prodList*/
 
-        prodList.add(new Product("Product1", 100.0, "Category1", new NoDiscountProduct());
-        prodList.add(new Product("Product2", 200.0, "Category2", new FixedDiscountProduct(20.0)));
-        prodList.add(new Product("Product3", 300.0, "Category3", new PercentageDiscountProduct(10.0)));
-        prodList.add(new Product("Product4", 400.0, "Category4", new NoDiscountProduct()));
-        prodList.add(new Product("Product5", 500.0, "Category5", new FixedDiscountProduct(50.0)));
-        prodList.add(new Product("Product6", 600.0, "Category6", new PercentageDiscountProduct(15.0)));
-        prodList.add(new Product("Product7", 700.0, "Category7", new NoDiscountProduct()));
-        prodList.add(new Product("Product8", 800.0, "Category8", new FixedDiscountProduct(80.0)));
-        prodList.add(new Product("Product9", 900.0, "Category9", new PercentageDiscountProduct(20.0)));
-        prodList.add(new Product("Product10", 1000.0, "Category10", new NoDiscountProduct()));
+        prodList.add(new NoDiscountProduct("Product1", 200.0, "Category1"));
+        prodList.add(new FixedDiscountProduct("Product2", 200.0, "Category2", 20.0));
+        prodList.add(new PercentageDiscountProduct("Product3", 300.0, "Category3", 10));
+        prodList.add(new NoDiscountProduct("Product4", 400.0, "Category4"));
+        prodList.add(new FixedDiscountProduct("Product5", 500.0, "Category5", 50.0));
+        prodList.add(new PercentageDiscountProduct("Product6", 600.0, "Category6", 15));
+        prodList.add(new NoDiscountProduct("Product7", 700.0, "Category7"));
+        prodList.add(new FixedDiscountProduct("Product8", 800.0, "Category8", 80.0));
+        prodList.add(new PercentageDiscountProduct("Product9", 900.0, "Category9", 20));
+        prodList.add(new NoDiscountProduct("Product10", 1000.0, "Category10"));
 
         /*TODO: Change the discount type of one of those created products*/
-        prodList.get(0).setDiscountStrategy(new PercentageDiscountProduct(5.0));
+        prodList.get(0).setDiscountStrategy(new PercentageDiscountStrategy(5));
 
         return prodList;
     }
