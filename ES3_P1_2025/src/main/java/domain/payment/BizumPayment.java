@@ -1,11 +1,24 @@
 package domain.payment;
 
-import domain.order.ConfirmedOrder;
+public class BizumPayment extends Payment {
+    @Override
+    protected void obtainPaymentData() {
+        System.out.println("Customer information received");
+    }
 
-import java.util.Date;
+    @Override
+    protected void validateData() {
+        System.out.println("Validated customer data successfully");
+    }
 
-public class BizumPayment extends Payment{
-    public BizumPayment(Date start, Date end, ConfirmedOrder order) {
-        super(start, end, order);
+    @Override
+    protected boolean pay() {
+        System.out.println("Bizum payment received");
+        return true;
+    }
+
+    @Override
+    protected void sendReceipt() {
+        System.out.println("Receipt sent to customer");
     }
 }

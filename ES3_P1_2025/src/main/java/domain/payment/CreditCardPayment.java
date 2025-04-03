@@ -1,11 +1,24 @@
 package domain.payment;
 
-import domain.order.ConfirmedOrder;
+public class CreditCardPayment extends Payment {
+    @Override
+    protected void obtainPaymentData() {
+        System.out.println("Credit card information received");
+    }
 
-import java.util.Date;
+    @Override
+    protected void validateData() {
+        System.out.println("Validated customer data successfully");
+    }
 
-public class CreditCardPayment extends Payment{
-    public CreditCardPayment(Date start, Date end, ConfirmedOrder order) {
-        super(start, end, order);
+    @Override
+    protected boolean pay() {
+        System.out.println("Credit card payment made successfully");
+        return true;
+    }
+
+    @Override
+    protected void sendReceipt() {
+        System.out.println("Receipt sent to customer");
     }
 }

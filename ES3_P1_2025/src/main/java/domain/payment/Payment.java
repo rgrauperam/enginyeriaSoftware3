@@ -1,41 +1,37 @@
 package domain.payment;
 
-import domain.order.ConfirmedOrder;
-
 import java.util.Date;
 
-public class Payment {
+public abstract class Payment {
     private Date start;
     private Date end;
-    private ConfirmedOrder order;
 
-    public Payment(Date start, Date end, ConfirmedOrder order) {
-        this.start = start;
-        this.end = end;
-        this.order = order;
+    public Payment() {
+        this.start = new Date();
     }
 
     public Date getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
     public Date getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
-        this.end = end;
+    public final void processPayment() {
+        obtainPaymentData();
+        validateData();
+        if (pay()) {
+            setEndDate();
+            sendReceipt();
+        }
     }
 
-    public ConfirmedOrder getOrder() {
-        return order;
+    protected abstract void obtainPaymentData();
+    protected abstract void validateData();
+    protected abstract boolean pay();
+    protected void setEndDate() {
+        this.end = new Date();
     }
-
-    public void setOrder(ConfirmedOrder order) {
-        this.order = order;
-    }
+    protected abstract void sendReceipt();
 }
