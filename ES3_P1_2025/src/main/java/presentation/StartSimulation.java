@@ -1,6 +1,10 @@
 package presentation;
 
 import domain.order.Order;
+import domain.payment.PaymentMethod;
+import domain.product.FixedDiscountProduct;
+import domain.product.NoDiscountProduct;
+import domain.product.PercentageDiscountProduct;
 import domain.product.Product;
 
 import domain.payment.Payment;
@@ -14,7 +18,7 @@ public class StartSimulation {
 
     public static void main (String [] args) {
 
-        Store store = null; //TODO: Create new store
+        Store store = Store.getInstance(); //TODO: Create new store
 
         System.out.println("Welcome to " + store.getName() + " at " + store.getAddress());
         System.out.println("*******************");
@@ -30,13 +34,14 @@ public class StartSimulation {
         System.out.println("Order payment:");
         System.out.println("--------");
         //TODO: You can use these lines below to create different payment methods
-        //PaymentMethod paymentMethod = PaymentMethod.CreditCard;
-        //PaymentMethod paymentMethod = PaymentMethod.Bizum;
-        //PaymentMethod paymentMethod = PaymentMethod.PayPal;
+        PaymentMethod paymentMethod = PaymentMethod.CreditCard;
+        PaymentMethod paymentMethod2 = PaymentMethod.Bizum;
+        PaymentMethod paymentMethod3 = PaymentMethod.PayPal;
 
 
         //TODO: Complete to create Payment
-        Payment pay = null;
+        //Mètode de pagament amb creditCard
+        Payment pay = paymentMethod.createPayment();
 
         o.confirmOrderAndPay(pay);
         System.out.println("Completed order info:");
@@ -52,7 +57,19 @@ public class StartSimulation {
 
         /*TODO: Create 10 different products with different discount types and add them to prodList*/
 
+        prodList.add(new Product("Product1", 100.0, "Category1", new NoDiscountProduct());
+        prodList.add(new Product("Product2", 200.0, "Category2", new FixedDiscountProduct(20.0)));
+        prodList.add(new Product("Product3", 300.0, "Category3", new PercentageDiscountProduct(10.0)));
+        prodList.add(new Product("Product4", 400.0, "Category4", new NoDiscountProduct()));
+        prodList.add(new Product("Product5", 500.0, "Category5", new FixedDiscountProduct(50.0)));
+        prodList.add(new Product("Product6", 600.0, "Category6", new PercentageDiscountProduct(15.0)));
+        prodList.add(new Product("Product7", 700.0, "Category7", new NoDiscountProduct()));
+        prodList.add(new Product("Product8", 800.0, "Category8", new FixedDiscountProduct(80.0)));
+        prodList.add(new Product("Product9", 900.0, "Category9", new PercentageDiscountProduct(20.0)));
+        prodList.add(new Product("Product10", 1000.0, "Category10", new NoDiscountProduct()));
+
         /*TODO: Change the discount type of one of those created products*/
+        prodList.get(0).setDiscountStrategy(new PercentageDiscountProduct(5.0));
 
         return prodList;
     }
@@ -79,7 +96,10 @@ public class StartSimulation {
 
     private static Order createOrder(List<Product> prodList) {
         /*TODO: Create a new pending order and add three different products from prodList*/
-        Order o = null;
+        Order o = new Order();
+        o.addProduct(prodList.get(0));
+        o.addProduct(prodList.get(1));
+        o.addProduct(prodList.get(2));
         //TODO: Complete
         return o;
     }
