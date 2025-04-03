@@ -1,7 +1,7 @@
 package presentation;
 
 import domain.order.Order;
-import domain.order.Product;
+import domain.product.Product;
 
 import domain.payment.Payment;
 

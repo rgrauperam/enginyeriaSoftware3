@@ -1,17 +1,9 @@
 package domain.product;
 
-class PercentageDiscountProduct extends Product {
-    private int discountPercentage;
-
+public class PercentageDiscountProduct extends Product {
     public PercentageDiscountProduct(String name, double standardPrice, String category, int discountPercentage) {
-        super(name, standardPrice, category);
-        this.discountPercentage = discountPercentage;
+        super(name, standardPrice, category, new PercentageDiscountStrategy(discountPercentage));
     }
 
-    @Override
-    public double getFinalPrice() {
-        return standardPrice - (standardPrice * discountPercentage / 100.0);
-    }
+
 }
-
-
