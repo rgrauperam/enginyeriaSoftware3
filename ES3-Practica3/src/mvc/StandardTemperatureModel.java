@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class StandardTemperatureModel extends Observable implements TemperatureModelInterface, Runnable {
+    /*TODO: Ensure that  StandardTemperatureModel implements the corresponding interface (other than Runnable)*/
 
     private int targetTemperature;
     private int currentTemperature;
@@ -26,6 +27,7 @@ public class StandardTemperatureModel extends Observable implements TemperatureM
         stopThread = false; // Reset flag before starting
         thread = new Thread(this);
         thread.start();
+        //TODO: may require additional code
         // Notify observers that the state might have changed (e.g., model is now "on")
         setChanged();
         notifyObservers();
@@ -37,16 +39,22 @@ public class StandardTemperatureModel extends Observable implements TemperatureM
         if (thread != null) {
             thread.interrupt(); // Interrupt the thread to stop it from sleeping
         }
+        //TODO: may require additional code
         // Notify observers that the state might have changed (e.g., model is now "off")
         setChanged();
         notifyObservers();
     }
+
+    /*TODO: Complete with appropriate methods and ensure that they work as expected. You may also need to add code to
+     *  on and off methods above*/
 
     @Override
     public void run() {
         while(!stopThread) {
             try {
                 Thread.sleep(3000); // Sleep for 3 seconds
+                //TODO: Add code here to ensure that current temperature moves towards target temperature (in +1 or -1 increments).
+                //TODO: View should be updated
                 if (stopThread) break; // Check flag again after sleep
 
                 boolean changed = false;

@@ -1,6 +1,7 @@
 package mvc;
 
 public class ReadOnlyTemperatureController implements TemperatureControllerInterface {
+    /*TODO: Ensure that it implements the right interface*/
 
     TemperatureModelInterface model;
     TemperatureView view;
@@ -8,6 +9,7 @@ public class ReadOnlyTemperatureController implements TemperatureControllerInter
     public ReadOnlyTemperatureController(TemperatureModelInterface model) {
         this.model = model;
 
+        /*TODO: Create view and assign class attributes*/
         this.view = new TemperatureView(this, model);
         view.createView();
         view.createControls();
@@ -23,6 +25,13 @@ public class ReadOnlyTemperatureController implements TemperatureControllerInter
         view.setCurrentTemperatureDisplay(String.valueOf(model.getCurrentTemperature()));
     }
 
+    /*TODO: Complete with the interface methods. Some tips below.*/
+
+    /*TODO: Start method is invoked when the user clicks File->Start
+     * It should invoke model.on
+     * It should also prepare the UI, enabling and disabling the right elements
+     *
+     *  */
     @Override
     public void start() {
         model.on();
@@ -36,6 +45,11 @@ public class ReadOnlyTemperatureController implements TemperatureControllerInter
         view.setTargetTemperatureDisplay("N/A");
     }
 
+    /*TODO: Start method is invoked when the user clicks File->Stop
+     * It should invoke model.off
+     * It should also prepare the UI, enabling and disabling the right elements
+     *
+     *  */
     @Override
     public void stop() {
         model.off();

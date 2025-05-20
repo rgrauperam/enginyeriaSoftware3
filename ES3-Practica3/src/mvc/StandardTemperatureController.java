@@ -1,6 +1,7 @@
 package mvc;
 
 public class StandardTemperatureController implements TemperatureControllerInterface {
+    /*TODO: Ensure that it implements the right interface*/
 
     TemperatureModelInterface model;
     TemperatureView view;
@@ -10,11 +11,12 @@ public class StandardTemperatureController implements TemperatureControllerInter
         this.model = model;
         this.controlEnabled = controlEnabled;
 
+        /*TODO: Create view and assign class attributes*/
         this.view = new TemperatureView(this, model);
         view.createView();
         view.createControls();
 
-        // Initial UI state
+        /*TODO: Prepare UI */
         view.disableStopMenuItem();
         view.enableStartMenuItem();
         view.disableIncreaseButton();
@@ -33,6 +35,13 @@ public class StandardTemperatureController implements TemperatureControllerInter
         view.setCurrentTemperatureDisplay(String.valueOf(model.getCurrentTemperature()));
     }
 
+    /*TODO: Complete with the interface methods. Some tips below.*/
+
+    /*TODO: Start method is invoked when the user clicks File->Start
+     * It should invoke model.on
+     * It should also prepare the UI, enabling and disabling the right elements
+     *
+     *  */
     @Override
     public void start() {
         model.on();
@@ -54,6 +63,11 @@ public class StandardTemperatureController implements TemperatureControllerInter
         }
     }
 
+    /*TODO: Start method is invoked when the user clicks File->Stop
+     * It should invoke model.off
+     * It should also prepare the UI, enabling and disabling the right elements
+     *
+     *  */
     @Override
     public void stop() {
         model.off();

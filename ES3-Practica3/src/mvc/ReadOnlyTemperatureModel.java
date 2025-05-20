@@ -5,6 +5,7 @@ import java.util.Observer;
 import java.util.Random;
 
 public class ReadOnlyTemperatureModel extends Observable implements TemperatureModelInterface, Runnable {
+    /*TODO: Ensure that ReadOnlyTemperatureModel implements the corresponding interface (other than Runnable)*/
 
     private int currentTemperature;
     private Thread thread;
@@ -37,6 +38,8 @@ public class ReadOnlyTemperatureModel extends Observable implements TemperatureM
         notifyObservers();
     }
 
+    /*TODO: Complete with appropriate methods and ensure that they work as expected. You may also need to add code to
+     *  on and off methods above*/
     @Override
     public void run() {
         while (!stopThread) {
