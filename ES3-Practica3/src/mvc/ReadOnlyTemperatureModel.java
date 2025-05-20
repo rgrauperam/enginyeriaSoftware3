@@ -1,56 +1,91 @@
 package mvc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 
-public class ReadOnlyTemperatureModel implements Runnable{
-    /*TODO: Ensure that ReadOnlyTemperatureModel implements the corresponding interface (other than Runnable)*/
+public class ReadOnlyTemperatureModel extends Observable implements TemperatureModelInterface, Runnable {
 
     private int currentTemperature;
-    private List<Observer> observerList;
     private Thread thread;
-    private boolean stopThread;
+    private volatile boolean stopThread;
+    private Random random = new Random();
 
-    public ReadOnlyTemperatureModel(){
-        Random rand = new Random();
-        observerList = new ArrayList<>();
-        currentTemperature = rand.nextInt(-30,40);
+    public ReadOnlyTemperatureModel() {
+        currentTemperature = random.nextInt(0, 31); // Initial random temperature
+        stopThread = false;
     }
-
 
     @Override
     public void on() {
-        thread = new Thread(this);
-        thread.start();
         stopThread = false;
-        //TODO: may require additional code
+        if (thread == null || !thread.isAlive()) {
+            thread = new Thread(this);
+            thread.start();
+        }
+        setChanged();
+        notifyObservers();
     }
 
     @Override
     public void off() {
         stopThread = true;
-        thread.interrupt();
-        //TODO: may require additional code
+        if (thread != null) {
+            thread.interrupt();
+        }
+        setChanged();
+        notifyObservers();
     }
-
-    /*TODO: Complete with appropriate methods and ensure that they work as expected. You may also need to add code to
-     *  on and off methods above*/
 
     @Override
     public void run() {
         while (!stopThread) {
             try {
-                Thread.sleep(2000);
-                Random rand = new Random();
-                currentTemperature += rand.nextInt(-1, 2);
-                System.out.println("Current temperature " + currentTemperature); //This is left for easier debugging
-                //TODO: View should be updated
-            } catch (Exception e) {
+                Thread.sleep(3000);
+                if (stopThread) break;
 
+                int change = random.nextInt(3) - 1; // -1, 0, or 1
+                currentTemperature += change;
+
+                if (currentTemperature < 0) currentTemperature = 0;
+                if (currentTemperature > 40) currentTemperature = 40; // Example range
+
+                setChanged();
+                notifyObservers();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Restore interrupted status
+                break;
+            } catch (Exception e) {
+                e.printStackTrace(); // Log other exceptions
             }
         }
-        stopThread = false;
     }
 
+    @Override
+    public int getCurrentTemperature() {
+        return currentTemperature;
+    }
+
+    @Override
+    public int getTargetTemperature() {
+        // In read-only mode, the actual value of target temperature from the model
+        // is not directly displayed if controls are disabled. The controller sets "N/A".
+        // Returning current temperature is a safe default.
+        return currentTemperature;
+    }
+
+    @Override
+    public void setTargetTemperature(int temp) {
+        // This model is read-only for target temperature; this method does nothing.
+    }
+
+    @Override
+    public void registerObserver(Observer o) {
+        this.addObserver(o);
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+        this.deleteObserver(o);
+    }
 }

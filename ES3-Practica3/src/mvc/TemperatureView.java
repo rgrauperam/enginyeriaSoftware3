@@ -4,9 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
-public class TemperatureView implements ActionListener {
-    /* TODO: Ensure that it implements the right interface, other than ActionListener*/
+public class TemperatureView implements ActionListener, Observer {
 
     private TemperatureModelInterface model;
     private TemperatureControllerInterface controller;
@@ -30,7 +31,9 @@ public class TemperatureView implements ActionListener {
 
 
     public TemperatureView(TemperatureControllerInterface controller, TemperatureModelInterface model) {
-        /*TODO: Complete this constructor. Remember that the view is an observer of the model.*/
+        this.controller = controller;
+        this.model = model;
+        this.model.registerObserver(this); // Register view as an observer of the model
     }
 
     public void createView() {
@@ -71,7 +74,6 @@ public class TemperatureView implements ActionListener {
         int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
         viewFrame.setLocation((int) (screenWidth/2.5), (int)(screenHeight/2.5));
         viewFrame.setVisible(true);
-
     }
 
 
@@ -141,20 +143,87 @@ public class TemperatureView implements ActionListener {
         controlFrame.setVisible(true);
     }
 
-    /*TODO: Add public methods to enable and disable UI elements
-       (https://docs.oracle.com/en/java/javase/22/docs/api/java.desktop/javax/swing/JComponent.html#setEnabled(boolean))*/
+    public void enableStartMenuItem() {
+        startMenuItem.setEnabled(true);
+    }
 
+    public void disableStartMenuItem() {
+        startMenuItem.setEnabled(false);
+    }
 
+    public void enableStopMenuItem() {
+        stopMenuItem.setEnabled(true);
+    }
 
+    public void disableStopMenuItem() {
+        stopMenuItem.setEnabled(false);
+    }
+
+    public void enableIncreaseButton() {
+        increaseTempButton.setEnabled(true);
+    }
+
+    public void disableIncreaseButton() {
+        increaseTempButton.setEnabled(false);
+    }
+
+    public void enableDecreaseButton() {
+        decreaseTempButton.setEnabled(true);
+    }
+
+    public void disableDecreaseButton() {
+        decreaseTempButton.setEnabled(false);
+    }
+
+    public void enableSetButton() {
+        setTempButton.setEnabled(true);
+    }
+
+    public void disableSetButton() {
+        setTempButton.setEnabled(false);
+    }
+
+    public void setTargetTemperatureEditable(boolean editable) {
+        tempTextField.setEditable(editable);
+    }
+
+    public void setTargetTemperatureDisplay(String text) {
+        tempOutputLabel.setText(text);
+    }
+
+    public void setCurrentTemperatureDisplay(String text) {
+        currentTemp.setText(text);
+    }
+
+    @Override
     public void actionPerformed(ActionEvent event) {
-        /*TODO: Complete this method to ensure that it processes the buttons clicked by the user
-        *  https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/util/EventObject.html#getSource()
-        * - increaseTempButton
-        * - decreaseTempButton
-        * - setTempButton
-        * */
+        Object source = event.getSource();
+        if (source == increaseTempButton) {
+            controller.increaseTargetTemperature();
+        } else if (source == decreaseTempButton) {
+            controller.decreaseTargetTemperature();
+        } else if (source == setTempButton) {
+            try {
+                int temp = Integer.parseInt(tempTextField.getText());
+                controller.setTargetTemperature(temp);
+            } catch (NumberFormatException nfe) {
+                JOptionPane.showMessageDialog(controlFrame, "Please enter a valid number for temperature.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                tempTextField.setText(""); // Clear invalid input
+            }
         }
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof TemperatureModelInterface) {
+            TemperatureModelInterface currentModel = (TemperatureModelInterface) o;
+            this.currentTemp.setText(String.valueOf(currentModel.getCurrentTemperature()));
 
+            // Only update target temperature display from model if controls are enabled (i.e., text field is editable)
+            // Otherwise, the controller is responsible for setting tempOutputLabel to "N/A", "offline", etc.
+            if (this.tempTextField.isEditable()) {
+                this.tempOutputLabel.setText(String.valueOf(currentModel.getTargetTemperature()));
+            }
+        }
+    }
 }

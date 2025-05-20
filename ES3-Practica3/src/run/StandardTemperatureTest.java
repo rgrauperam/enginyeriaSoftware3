@@ -9,7 +9,7 @@ public class StandardTemperatureTest {
 
     public static void main (String[] args) {
         TemperatureModelInterface model = new StandardTemperatureModel();
-        TemperatureControllerInterface controller = new StandardTemperatureController(model);
+        TemperatureControllerInterface controller = new StandardTemperatureController(model, true);
     }
 
 

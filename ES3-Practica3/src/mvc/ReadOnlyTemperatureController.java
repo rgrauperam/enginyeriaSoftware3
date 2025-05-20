@@ -1,30 +1,66 @@
 package mvc;
 
-public class ReadOnlyTemperatureController{
-    /*TODO: Ensure that it implements the right interface*/
+public class ReadOnlyTemperatureController implements TemperatureControllerInterface {
 
-    private TemperatureView view;
-    private TemperatureModelInterface model;
+    TemperatureModelInterface model;
+    TemperatureView view;
 
-    public ReadOnlyTemperatureController(TemperatureModelInterface tempModel){
-       /*TODO: Create view and assign class attributes*/
+    public ReadOnlyTemperatureController(TemperatureModelInterface model) {
+        this.model = model;
+
+        this.view = new TemperatureView(this, model);
         view.createView();
         view.createControls();
-        /*TODO: Prepare UI */
+
+        // Initial UI state for read-only mode
+        view.disableStopMenuItem();
+        view.enableStartMenuItem();
+        view.disableIncreaseButton();
+        view.disableDecreaseButton();
+        view.disableSetButton();
+        view.setTargetTemperatureEditable(false);
+        view.setTargetTemperatureDisplay("N/A");
+        view.setCurrentTemperatureDisplay(String.valueOf(model.getCurrentTemperature()));
     }
 
-    /*TODO: Complete with the interface methods. Some tips below.*/
+    @Override
+    public void start() {
+        model.on();
+        view.enableStopMenuItem();
+        view.disableStartMenuItem();
+        // Ensure controls remain disabled and target display is N/A
+        view.disableIncreaseButton();
+        view.disableDecreaseButton();
+        view.disableSetButton();
+        view.setTargetTemperatureEditable(false);
+        view.setTargetTemperatureDisplay("N/A");
+    }
 
-    /*TODO: Start method is invoked when the user clicks File->Start
-     * It should invoke model.on
-     * It should also prepare the UI, enabling and disabling the right elements
-     *
-     *  */
+    @Override
+    public void stop() {
+        model.off();
+        view.disableStopMenuItem();
+        view.enableStartMenuItem();
+        // Controls remain disabled
+        view.disableIncreaseButton();
+        view.disableDecreaseButton();
+        view.disableSetButton();
+        view.setTargetTemperatureEditable(false);
+        view.setTargetTemperatureDisplay("offline");
+    }
 
+    @Override
+    public void increaseTargetTemperature() {
+        // No-op in read-only mode
+    }
 
-    /*TODO: Start method is invoked when the user clicks File->Stop
-     * It should invoke model.off
-     * It should also prepare the UI, enabling and disabling the right elements
-     *
-     *  */
+    @Override
+    public void decreaseTargetTemperature() {
+        // No-op in read-only mode
+    }
+
+    @Override
+    public void setTargetTemperature(int temp) {
+        // No-op in read-only mode
+    }
 }
