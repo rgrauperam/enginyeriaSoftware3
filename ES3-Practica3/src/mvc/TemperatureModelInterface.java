@@ -1,6 +1,7 @@
 package mvc;
 
-import java.util.Observer; // Required for the Observer pattern
+// import java.util.Observer; // This line was already commented out or removed in previous steps
+// No need for java.util.Observer anymore
 
 public interface TemperatureModelInterface {
     void on();
@@ -9,6 +10,6 @@ public interface TemperatureModelInterface {
     int getTargetTemperature();
     void setTargetTemperature(int temp);
 
-    void registerObserver(Observer o);
-    void removeObserver(Observer o);
+    void registerObserver(ModelObserver o); // Changed from java.util.Observer
+    void removeObserver(ModelObserver o);   // Changed from java.util.Observer
 }

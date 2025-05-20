@@ -4,11 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
+// No longer need java.util.Observable or java.util.Observer
 
-public class TemperatureView implements ActionListener, Observer {
-    /* TODO: Ensure that it implements the right interface, other than ActionListener*/
+public class TemperatureView implements ActionListener, ModelObserver { // Implement new ModelObserver
 
     private TemperatureModelInterface model;
     private TemperatureControllerInterface controller;
@@ -32,10 +30,9 @@ public class TemperatureView implements ActionListener, Observer {
 
 
     public TemperatureView(TemperatureControllerInterface controller, TemperatureModelInterface model) {
-        /*TODO: Complete this constructor. Remember that the view is an observer of the model.*/
         this.controller = controller;
         this.model = model;
-        this.model.registerObserver(this); // Register view as an observer of the model
+        this.model.registerObserver(this); // 'this' is a ModelObserver
     }
 
     public void createView() {
@@ -145,9 +142,6 @@ public class TemperatureView implements ActionListener, Observer {
         controlFrame.setVisible(true);
     }
 
-    /*TODO: Add public methods to enable and disable UI elements
-   (https://docs.oracle.com/en/java/javase/22/docs/api/java.desktop/javax/swing/JComponent.html#setEnabled(boolean))*/
-
     public void enableStartMenuItem() {
         startMenuItem.setEnabled(true);
     }
@@ -202,12 +196,6 @@ public class TemperatureView implements ActionListener, Observer {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        /*TODO: Complete this method to ensure that it processes the buttons clicked by the user
-         *  https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/util/EventObject.html#getSource()
-         * - increaseTempButton
-         * - decreaseTempButton
-         * - setTempButton
-         * */
         Object source = event.getSource();
         if (source == increaseTempButton) {
             controller.increaseTargetTemperature();
@@ -225,16 +213,13 @@ public class TemperatureView implements ActionListener, Observer {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        if (o instanceof TemperatureModelInterface) {
-            TemperatureModelInterface currentModel = (TemperatureModelInterface) o;
-            this.currentTemp.setText(String.valueOf(currentModel.getCurrentTemperature()));
+    public void update(TemperatureModelInterface notifiedModel) { // Signature changed
+        // The 'notifiedModel' parameter is the model instance that triggered the update.
+        // It should be the same as 'this.model' if everything is wired correctly.
+        this.currentTemp.setText(String.valueOf(notifiedModel.getCurrentTemperature()));
 
-            // Only update target temperature display from model if controls are enabled (i.e., text field is editable)
-            // Otherwise, the controller is responsible for setting tempOutputLabel to "N/A", "offline", etc.
-            if (this.tempTextField.isEditable()) {
-                this.tempOutputLabel.setText(String.valueOf(currentModel.getTargetTemperature()));
-            }
+        if (this.tempTextField.isEditable()) {
+            this.tempOutputLabel.setText(String.valueOf(notifiedModel.getTargetTemperature()));
         }
     }
 }

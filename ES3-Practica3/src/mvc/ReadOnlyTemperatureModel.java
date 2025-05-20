@@ -1,11 +1,9 @@
 package mvc;
 
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Random;
+// No longer need java.util.Observable or java.util.Observer
 
-public class ReadOnlyTemperatureModel extends Observable implements TemperatureModelInterface, Runnable {
-    /*TODO: Ensure that ReadOnlyTemperatureModel implements the corresponding interface (other than Runnable)*/
+public class ReadOnlyTemperatureModel extends TemperatureObserver implements TemperatureModelInterface, Runnable {
 
     private int currentTemperature;
     private Thread thread;
@@ -24,8 +22,8 @@ public class ReadOnlyTemperatureModel extends Observable implements TemperatureM
             thread = new Thread(this);
             thread.start();
         }
-        setChanged();
-        notifyObservers();
+        super.setChanged();
+        super.notifyObservers(this);
     }
 
     @Override
@@ -34,12 +32,10 @@ public class ReadOnlyTemperatureModel extends Observable implements TemperatureM
         if (thread != null) {
             thread.interrupt();
         }
-        setChanged();
-        notifyObservers();
+        super.setChanged();
+        super.notifyObservers(this);
     }
 
-    /*TODO: Complete with appropriate methods and ensure that they work as expected. You may also need to add code to
-     *  on and off methods above*/
     @Override
     public void run() {
         while (!stopThread) {
@@ -53,8 +49,8 @@ public class ReadOnlyTemperatureModel extends Observable implements TemperatureM
                 if (currentTemperature < 0) currentTemperature = 0;
                 if (currentTemperature > 40) currentTemperature = 40; // Example range
 
-                setChanged();
-                notifyObservers();
+                super.setChanged();
+                super.notifyObservers(this);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // Restore interrupted status
                 break;
@@ -71,24 +67,22 @@ public class ReadOnlyTemperatureModel extends Observable implements TemperatureM
 
     @Override
     public int getTargetTemperature() {
-        // In read-only mode, the actual value of target temperature from the model
-        // is not directly displayed if controls are disabled. The controller sets "N/A".
-        // Returning current temperature is a safe default.
         return currentTemperature;
     }
 
     @Override
     public void setTargetTemperature(int temp) {
         // This model is read-only for target temperature; this method does nothing.
+        // No notification needed as state doesn't change.
     }
 
     @Override
-    public void registerObserver(Observer o) {
-        this.addObserver(o);
+    public void registerObserver(ModelObserver o) {
+        super.addObserver(o);
     }
 
     @Override
-    public void removeObserver(Observer o) {
-        this.deleteObserver(o);
+    public void removeObserver(ModelObserver o) {
+        super.deleteObserver(o);
     }
 }
