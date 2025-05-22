@@ -27,9 +27,6 @@ public class StandardTemperatureController implements TemperatureControllerInter
         if (!controlEnabled) {
             view.setTargetTemperatureDisplay("N/A");
         } else {
-            // When control is enabled, target initially matches current or is set by model.
-            // The view's update method will handle displaying it if controls are active.
-            // Or, explicitly set it based on the model's initial target.
             view.setTargetTemperatureDisplay(String.valueOf(model.getTargetTemperature()));
         }
         view.setCurrentTemperatureDisplay(String.valueOf(model.getCurrentTemperature()));
@@ -52,14 +49,12 @@ public class StandardTemperatureController implements TemperatureControllerInter
             view.enableDecreaseButton();
             view.enableSetButton();
             view.setTargetTemperatureEditable(true);
-            // Target temperature display will be updated by the view's update() method
-            // as it pulls from the model and tempTextField is editable.
         } else {
             view.disableIncreaseButton();
             view.disableDecreaseButton();
             view.disableSetButton();
             view.setTargetTemperatureEditable(false);
-            view.setTargetTemperatureDisplay("N/A"); // Ensure N/A for monitor-only
+            view.setTargetTemperatureDisplay("N/A");
         }
     }
 
@@ -77,7 +72,7 @@ public class StandardTemperatureController implements TemperatureControllerInter
         view.disableDecreaseButton();
         view.disableSetButton();
         view.setTargetTemperatureEditable(false);
-        view.setTargetTemperatureDisplay("offline"); // Set target display to "offline"
+        view.setTargetTemperatureDisplay("offline"); 
     }
 
     @Override

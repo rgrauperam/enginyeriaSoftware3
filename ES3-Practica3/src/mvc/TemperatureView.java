@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 
 public class TemperatureView implements ActionListener, ModelObserver { // Implement new ModelObserver
 
+    /* TODO: Ensure that it implements the right interface, other than ActionListener*/
+
     private TemperatureModelInterface model;
     private TemperatureControllerInterface controller;
     private JFrame viewFrame;
@@ -30,9 +32,10 @@ public class TemperatureView implements ActionListener, ModelObserver { // Imple
 
 
     public TemperatureView(TemperatureControllerInterface controller, TemperatureModelInterface model) {
+        /*TODO: Complete this constructor. Remember that the view is an observer of the model.*/
         this.controller = controller;
         this.model = model;
-        this.model.registerObserver(this); // 'this' is a ModelObserver
+        this.model.registerObserver(this);
     }
 
     public void createView() {
@@ -142,6 +145,9 @@ public class TemperatureView implements ActionListener, ModelObserver { // Imple
         controlFrame.setVisible(true);
     }
 
+    /*TODO: Add public methods to enable and disable UI elements
+       (https://docs.oracle.com/en/java/javase/22/docs/api/java.desktop/javax/swing/JComponent.html#setEnabled(boolean))*/
+
     public void enableStartMenuItem() {
         startMenuItem.setEnabled(true);
     }
@@ -196,6 +202,14 @@ public class TemperatureView implements ActionListener, ModelObserver { // Imple
 
     @Override
     public void actionPerformed(ActionEvent event) {
+
+        /*TODO: Complete this method to ensure that it processes the buttons clicked by the user
+         *  https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/util/EventObject.html#getSource()
+         * - increaseTempButton
+         * - decreaseTempButton
+         * - setTempButton
+         * */
+
         Object source = event.getSource();
         if (source == increaseTempButton) {
             controller.increaseTargetTemperature();
@@ -213,11 +227,8 @@ public class TemperatureView implements ActionListener, ModelObserver { // Imple
     }
 
     @Override
-    public void update(TemperatureModelInterface notifiedModel) { // Signature changed
-        // The 'notifiedModel' parameter is the model instance that triggered the update.
-        // It should be the same as 'this.model' if everything is wired correctly.
+    public void update(TemperatureModelInterface notifiedModel) {
         this.currentTemp.setText(String.valueOf(notifiedModel.getCurrentTemperature()));
-
         if (this.tempTextField.isEditable()) {
             this.tempOutputLabel.setText(String.valueOf(notifiedModel.getTargetTemperature()));
         }
