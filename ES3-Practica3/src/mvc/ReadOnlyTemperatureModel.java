@@ -4,6 +4,7 @@ import java.util.Random;
 // No longer need java.util.Observable or java.util.Observer
 
 public class ReadOnlyTemperatureModel extends TemperatureObserver implements TemperatureModelInterface, Runnable {
+    /*TODO: Ensure that ReadOnlyTemperatureModel implements the corresponding interface (other than Runnable)*/
 
     private int currentTemperature;
     private Thread thread;
@@ -22,6 +23,7 @@ public class ReadOnlyTemperatureModel extends TemperatureObserver implements Tem
             thread = new Thread(this);
             thread.start();
         }
+        //TODO: may require additional code
         super.setChanged();
         super.notifyObservers(this);
     }
@@ -32,9 +34,13 @@ public class ReadOnlyTemperatureModel extends TemperatureObserver implements Tem
         if (thread != null) {
             thread.interrupt();
         }
+        //TODO: may require additional code
         super.setChanged();
         super.notifyObservers(this);
     }
+
+    /*TODO: Complete with appropriate methods and ensure that they work as expected. You may also need to add code to
+     *  on and off methods above*/
 
     @Override
     public void run() {
@@ -46,9 +52,12 @@ public class ReadOnlyTemperatureModel extends TemperatureObserver implements Tem
                 int change = random.nextInt(3) - 1; // -1, 0, or 1
                 currentTemperature += change;
 
+                System.out.println("Current temperature " + currentTemperature);
+
                 if (currentTemperature < 0) currentTemperature = 0;
                 if (currentTemperature > 40) currentTemperature = 40; // Example range
 
+                //TODO: View should be updated
                 super.setChanged();
                 super.notifyObservers(this);
             } catch (InterruptedException e) {
