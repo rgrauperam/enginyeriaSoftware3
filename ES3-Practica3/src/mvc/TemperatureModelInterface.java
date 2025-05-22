@@ -1,8 +1,5 @@
 package mvc;
 
-// import java.util.Observer; // This line was already commented out or removed in previous steps
-// No need for java.util.Observer anymore
-
 public interface TemperatureModelInterface {
     void on();
     void off();

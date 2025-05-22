@@ -3,7 +3,7 @@ package mvc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TemperatureObserver { // This is the "Observable" base class
+public class TemperatureObserver {
     private transient List<ModelObserver> actualObservers = new ArrayList<>();
     private boolean changed = false;
 
@@ -38,7 +38,6 @@ public class TemperatureObserver { // This is the "Observable" base class
             if (!hasChanged()) {
                 return;
             }
-            // Create a copy for safe iteration, in case an observer tries to unregister during notification
             observersToNotify = new ArrayList<>(this.actualObservers);
             clearChanged();
         }
