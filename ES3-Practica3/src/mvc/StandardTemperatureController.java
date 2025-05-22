@@ -72,7 +72,7 @@ public class StandardTemperatureController implements TemperatureControllerInter
         view.disableDecreaseButton();
         view.disableSetButton();
         view.setTargetTemperatureEditable(false);
-        view.setTargetTemperatureDisplay("offline"); 
+        view.setTargetTemperatureDisplay("offline");
     }
 
     @Override
